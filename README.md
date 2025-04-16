@@ -24,3 +24,7 @@ pip install -r requirements.txt
 ```bash
 bash gan_train.sh
 ```
+
+## Acknowledgement
+
+I would like to extend a special thanks to authors of F5-TTS, since our code base is mainly borrowed from [F5-TTS](https://github.com/SWivid/F5-TTS).
