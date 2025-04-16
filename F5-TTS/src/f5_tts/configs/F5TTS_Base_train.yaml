@@ -38,7 +38,7 @@ model:
     mel_spec_type: vocos  # 'vocos' or 'bigvgan'
   vocoder:
     is_local: True  # use local offline ckpt or not
-    local_path: /hpc_stor03/sjtu_home/yuxiang.zhao/F5-TTS/vocos-mel-24khz # /hpc_stor03/sjtu_home/yuxiang.zhao/F5-TTS/bigvgan_model/models--nvidia--bigvgan_v2_24khz_100band_256x/snapshots/c329ede9e9bbc100ddf5c91e2330a61921262370  # local vocoder path
+    local_path: /PATH/TO/vocos-mel-24khz 
 
 ckpts:
   logger: None  # wandb | tensorboard | None

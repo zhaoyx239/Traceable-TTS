@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Set paths and configurations
-F5TTS_DIR="/hpc_stor03/sjtu_home/yuxiang.zhao/F5-TTS"
-CLASSIFY_DIR="/hpc_stor03/sjtu_home/yuxiang.zhao/classification_project"
+F5TTS_DIR="/PATH/TO/F5-TTS"
+DISCRIMINATOR_DIR="/PATH/TO/DISCRIMINATOR"
 F5TTS_CONFIG="F5TTS_Base_train.yaml"
 
 # Number of GAN training loops
-TOTAL_LOOPS=20
+TOTAL_LOOPS=10
 
 
 for ((i=3; i<=TOTAL_LOOPS; i++))
@@ -29,7 +29,6 @@ do
         echo "F5TTS inference failed. Exiting loop $i."
         exit 1
     fi
-    # rsync -a --delete /hpc_stor03/sjtu_home/yuxiang.zhao/empty/ /hpc_stor03/sjtu_home/yuxiang.zhao/tmp/
     
     # Step 3: Train the classifier using the generated data
     echo "Training classifier...loop $i"

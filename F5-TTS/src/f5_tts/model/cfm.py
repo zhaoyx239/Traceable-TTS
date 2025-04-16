@@ -28,12 +28,11 @@ from f5_tts.model.utils import (
     mask_from_frac_lengths,
 )
 
-from vocos import Vocos  # 导入 Vocos 库
+from vocos import Vocos 
 import sys
 import os
-sys.path.append("/hpc_stor03/sjtu_home/yuxiang.zhao/classification_project")
 from models.mel_classifier import MelResNetClassifier
-from gan_test import check  # 导入 gan_test.py 中的 check 函数
+from gan_test import check  
 
 class CFM(nn.Module):
     def __init__(
@@ -212,16 +211,16 @@ class CFM(nn.Module):
 
         return out, trajectory
     def bce_loss_audio(self,pred):
-        # 加载 Vocos 模型
-        vocos_local_path = "/hpc_stor03/sjtu_home/yuxiang.zhao/F5-TTS/vocos-mel-24khz"
+        # Load Vocos model
+        vocos_local_path = "/PATH/TO/vocos-mel-24khz"
         config_path = f"{vocos_local_path}/config.yaml"
         model_path = f"{vocos_local_path}/pytorch_model.bin"
 
-        # 从本地路径加载 Vocos 配置和模型
+        # Load Vocos config and model from local path
         vocos = Vocos.from_hparams(config_path)
         state_dict = torch.load(model_path, map_location=pred.device, weights_only=True)
         from vocos.feature_extractors import EncodecFeatures
-        # 如果 feature_extractor 是 EncodecFeatures，更新其参数
+        # If feature_extractor is EncodecFeatures, update its parameters
         if isinstance(vocos.feature_extractor, EncodecFeatures):
             encodec_parameters = {
                 "feature_extractor.encodec." + key: value
@@ -229,63 +228,64 @@ class CFM(nn.Module):
             }
             state_dict.update(encodec_parameters)
 
-        # 加载模型权重
+        # Load model weights
         vocos.load_state_dict(state_dict)
         vocos.eval()
         vocos = vocos.to(pred.device)
         pred = pred.permute(0,2,1)
-        # 使用 Vocos 合成音频
+        # Use Vocos to synthesize audio
         with torch.no_grad():
-            audio_tensor = vocos.decode(pred)  # 使用 Vocos 合成音频
+            audio_tensor = vocos.decode(pred)  # Use Vocos to synthesize audio
             # print(f"Shape of audio_tensor: {audio_tensor.shape}")
 
         watermark_scores = check(audio_tensor)
         
-        # 将水印检测结果转换为张量
+        # Convert watermark detection results to tensor
         watermark_scores = torch.tensor(watermark_scores, dtype=torch.float32, device=self.device)
-        # bce与autocast不兼容，先逆sigmoid变换，再用bce_with_logits
+        # BCE is incompatible with autocast, so inverse sigmoid transform first, then use bce_with_logits
         watermark_scores = torch.clamp(watermark_scores,min = 1e-7,max = 1-1e-7)
         watermark_scores = torch.log(watermark_scores/(1-watermark_scores))
-        # 计算 BCE 损失
+        # Calculate BCE loss
         bce_loss_value = F.binary_cross_entropy_with_logits(watermark_scores, torch.ones_like(watermark_scores))
         return bce_loss_value
+
     def bce_loss_mel(self, pred_mel):
         """
-        修改后的BCE损失计算，直接使用预训练的Mel分类器
-        pred_mel: 模型预测的Mel频谱，形状应为(batch_size, n_mels, time)
+        Modified BCE loss calculation, directly using pre-trained Mel classifier
+        pred_mel: Predicted Mel spectrogram, shape should be (batch_size, n_mels, time)
         """
         
         mel_classifier = MelResNetClassifier(
-                input_type='mel',      # 直接输入Mel频谱
+                input_type='mel',      # Directly input Mel spectrogram
                 num_classes=1,
-                sr=24000,              # 与训练时参数一致
-                n_fft=1024,            # 需与Mel生成参数匹配
+                sr=24000,              # Consistent with training parameters
+                n_fft=1024,            # Matches Mel generation parameters
                 hop_length=256,
                 n_mels=128
             ).eval().to(pred_mel.device)
             
-        # 加载预训练权重
-        classifier_path = "/hpc_stor03/sjtu_home/yuxiang.zhao/classification_project/model_last.pth"
+        # Load pre-trained weights
+        classifier_path = "/PATH/TO/model_last.pth"
         state_dict = torch.load(classifier_path, map_location=pred_mel.device)
         mel_classifier.load_state_dict(state_dict)
             
-        # 冻结分类器参数
+        # Freeze classifier parameters
         for param in mel_classifier.parameters():
             param.requires_grad_(False)
 
-        # 调整输入维度 (batch, n_mels, time) -> (batch, 1, n_mels, time)
+        # Adjust input dimensions (batch, n_mels, time) -> (batch, 1, n_mels, time)
         input_mel = pred_mel.unsqueeze(1)
         
-        # 前向传播获取logits
+        # Forward pass to get logits
         with torch.no_grad():
-            # 添加频谱归一化（与分类器训练时一致）
+            # Add spectral normalization (consistent with classifier training)
             normalized_mel = (input_mel - input_mel.mean()) / (input_mel.std() + 1e-8)
             watermark_scores = mel_classifier(normalized_mel)
 
-        # 计算BCE损失（假设所有样本应为正类）
+        # Calculate BCE loss (assuming all samples should be positive)
         
-        if watermark_scores.dim() == 0:  # 如果是标量
-            watermark_scores = watermark_scores.unsqueeze(0)  # 转换为张量
+        if watermark_scores.dim() == 0:  # If scalar
+            watermark_scores = watermark_scores.unsqueeze(0)  # Convert to tensor
             
         target = torch.ones_like(watermark_scores)
         bce_loss = F.binary_cross_entropy_with_logits(

@@ -190,7 +190,7 @@ class Trainer:
             latest_checkpoint = "model_last.pt"
             checkpoint = torch.load(f"{self.checkpoint_path}/{latest_checkpoint}", map_location=self.accelerator.device)
         else:
-            checkpoint = torch.load(f"/hpc_stor03/sjtu_home/yuxiang.zhao/F5-TTS/ckpts/F5TTS_Base/model_1200000.pt", weights_only=True, map_location="cpu")
+            checkpoint = torch.load(f"/PATH/TO/F5-TTS/ckpts/F5TTS_Base/model_1200000.pt", weights_only=True, map_location="cpu")
             print("loading model_1200000.pt")
 
         # patch for backward compatibility, 305e3ea

@@ -127,9 +127,9 @@ wave_path = Path(output_dir) / output_file
 vocoder_name = args.vocoder_name
 mel_spec_type = args.vocoder_name
 if vocoder_name == "vocos":
-    vocoder_local_path = "/hpc_stor03/sjtu_home/yuxiang.zhao/F5-TTS/vocos-mel-24khz"
+    vocoder_local_path = "/PATH/TO/vocos-mel-24khz"
 elif vocoder_name == "bigvgan":
-    vocoder_local_path = "/hpc_stor03/sjtu_home/yuxiang.zhao/F5-TTS/bigvgan_model/models--nvidia--bigvgan_v2_24khz_100band_256x/snapshots/c329ede9e9bbc100ddf5c91e2330a61921262370"
+    vocoder_local_path = "/PATH/TO/bigvgan_model/models--nvidia--bigvgan_v2_24khz_100band_256x/snapshots/c329ede9e9bbc100ddf5c91e2330a61921262370"
 
 vocoder = load_vocoder(vocoder_name=mel_spec_type, is_local=args.load_vocoder_from_local, local_path=vocoder_local_path)
 
@@ -150,7 +150,7 @@ if model == "F5-TTS":
             exp_name = "F5TTS_Base_bigvgan"
             ckpt_step = 1250000
             # ckpt_file = str(cached_path(f"hf://SWivid/{repo_name}/{exp_name}/model_{ckpt_step}.pt"))
-            ckpt_file = "/hpc_stor03/sjtu_home/yuxiang.zhao/F5-TTS/ckpts/F5TTS_Base/model_last.pt"
+            ckpt_file = "/PATH/TO/F5-TTS/ckpts/F5TTS_Base/model_last.pt"
 
 elif model == "E2-TTS":
     assert vocoder_name == "vocos", "E2-TTS only supports vocoder vocos"

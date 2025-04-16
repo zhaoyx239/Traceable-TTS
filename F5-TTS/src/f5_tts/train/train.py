@@ -1,7 +1,6 @@
 # training script.
 
 import os
-os.environ["TMPDIR"] = "/hpc_stor03/sjtu_home/yuxiang.zhao/tmp"
 from importlib.resources import files
 
 import hydra

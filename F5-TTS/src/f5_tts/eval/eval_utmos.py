@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 def main():
     parser = argparse.ArgumentParser(description="UTMOS Evaluation")
-    parser.add_argument("--audio_dir", type=str, default = "/hpc_stor03/sjtu_home/yuxiang.zhao/data/infer/f5tts-mask/test-clean", help="Audio file path.")
+    parser.add_argument("--audio_dir", type=str, default = "/PATH/TO/DATA", help="Audio file path.")
     parser.add_argument("--ext", type=str, default="wav", help="Audio extension.")
     args = parser.parse_args()
 
