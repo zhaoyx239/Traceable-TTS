@@ -16,6 +16,8 @@ Recent advances in Text-To-Speech (TTS) technology have enabled synthetic speech
 ## Install
 
 ```bash
+git clone https://github.com/zhaoyx239/Traceable-TTS.git
+cd Traceable-TTS
 pip install -r requirements.txt
 ```
 
