@@ -1,0 +1,43 @@
+# Core dependencies
+torch>=2.0.0
+torchaudio>=2.0.0
+transformers>=4.30.0
+librosa>=0.10.0
+soundfile>=0.12.0
+numpy<=1.26.4
+scipy>=1.10.0
+tqdm>=4.65.0
+matplotlib>=3.7.0
+pandas>=2.0.0
+scikit-learn>=1.2.0
+accelerate>=0.33.0
+hydra-core>=1.3.0
+safetensors>=0.3.0
+
+# Additional dependencies from pyproject.toml
+bitsandbytes>0.37.0; 
+platform_machine != 'arm64'
+platform_system != 'Darwin'
+cached_path
+click
+datasets
+ema_pytorch>=0.5.2
+gradio>=3.45.2
+jieba
+pydantic<=2.10.6
+pydub
+pypinyin
+tomli
+torchdiffeq
+transformers_stream_generator
+vocos
+wandb
+x_transformers>=1.31.14
+
+# Optional dependencies for evaluation
+faster_whisper==0.10.1
+funasr
+jiwer
+modelscope
+zhconv
+zhon
