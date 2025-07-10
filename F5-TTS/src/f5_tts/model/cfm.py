@@ -369,8 +369,7 @@ class CFM(nn.Module):
         loss = loss[rand_span_mask]
 
         bce_loss_value = self.bce_loss_audio(pred)
-
-        # 将 BCE 损失加到主损失中
+        
         loss = loss + bce_loss_value
 
         return loss.mean(), cond, pred
