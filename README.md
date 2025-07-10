@@ -8,10 +8,7 @@ Recent advances in Text-To-Speech (TTS) technology have enabled synthetic speech
 
 ## Paper
 
-- **arXiv**: [arXiv:XXXX.XXXXX](https://arxiv.org/abs/XXXX.XXXXX) (TODO)
-  
-## Checkpoints
-- **Hugging Face**: [TraceableTTS on Hugging Face](https://huggingface.co/yourusername/TraceableTTS) (TODO)
+- **arXiv**: [arXiv:2507.03887](https://arxiv.org/abs/2507.03887) 
 
 ## Install
 
