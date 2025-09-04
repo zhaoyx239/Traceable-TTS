@@ -10,20 +10,6 @@ Recent advances in Text-To-Speech (TTS) technology have enabled synthetic speech
 
 - **arXiv**: [arXiv:2507.03887](https://arxiv.org/abs/2507.03887) 
 
-## Install
-
-```bash
-git clone https://github.com/zhaoyx239/Traceable-TTS.git
-cd Traceable-TTS
-pip install -r requirements.txt
-```
-
-## Training
-
-```bash
-bash gan_train.sh
-```
-
 ## Acknowledgement
 
 I would like to extend a special thanks to authors of F5-TTS, since our code base is mainly borrowed from [F5-TTS](https://github.com/SWivid/F5-TTS).
